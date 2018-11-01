@@ -20,7 +20,7 @@ public class Expression {
         }
     }
 
-    static Lqueue<String> str2queue(String str) {
+    public static Lqueue<String> str2queue(String str) {
         str = str.replaceAll(" ", "");
         Lqueue<String> que = new Lqueue<String>();
         int j = 0, i;
@@ -36,6 +36,7 @@ public class Expression {
                     j = i;
                 else {
                     // push the present symbol
+                    // todo if it is an alphabet, will handle as operator
                     que.push("" + str.charAt(i));
                     j = i + 1;
                 }
@@ -47,11 +48,11 @@ public class Expression {
         return que;
     }
 
-    static Lqueue<String> infix2suffix(Lqueue<String> exp) throws ErrorExpressionException {
+    public static Lqueue<String> infix2suffix(Lqueue<String> exp) throws ErrorExpressionException {
         return Expression.infix2suffix(exp, false);
     }
 
-    static Lqueue<String> infix2suffix(Lqueue<String> exp, boolean verbose) throws ErrorExpressionException {
+    public static Lqueue<String> infix2suffix(Lqueue<String> exp, boolean verbose) throws ErrorExpressionException {
         Lstack<String> temp = new Lstack<String>();
         Lqueue<String> result = new Lqueue<String>();
 
@@ -109,7 +110,7 @@ public class Expression {
                     if (!temp.isempty() && (temp.top().equals("*") || temp.top().equals("/"))) {
                         while (!temp.isempty()) {
                             if (temp.top().equals("("))
-                                throw new ErrorExpressionException("Mismatched Parenthesis");
+                                break;
                             result.push(temp.pop());
                         }
                     }
@@ -147,10 +148,13 @@ public class Expression {
         return result;
     }
 
-    static double calculate(Lqueue<String> que) throws ErrorExpressionException {
+    public static double calculate(String exp, boolean verbose) throws ErrorExpressionException {
+        return Expression.calculate(Expression.infix2suffix(Expression.str2queue(exp), verbose), verbose);
+    }
+    public static double calculate(Lqueue<String> que) throws ErrorExpressionException {
         return Expression.calculate(que, false);
     }
-    static double calculate(Lqueue<String> que, boolean verbose) throws ErrorExpressionException {
+    public static double calculate(Lqueue<String> que, boolean verbose) throws ErrorExpressionException {
         Lstack<String> stk = new Lstack<String>();
         while (!que.isempty()) {
             try {

@@ -1,8 +1,10 @@
-package graph;
+package main;
 
 import datastructure.Lqueue;
 import datastructure.Lstack;
 import datastructure.EmptyContainerException;
+import expression.Expression;
+import expression.ErrorExpressionException;
 import java.util.Scanner;
 
 public class Main {
@@ -11,7 +13,8 @@ public class Main {
 
         boolean goon = true;
         while (goon) {
-            System.out.print("Do you want to use stack or queue? (s to stack, q to queue, e to exit): ");
+            System.out.print("Do you want to use stack or queue?");
+            System.out.print("(s to stack, q to queue, x to expression, e to exit): ");
             switch (input.next().charAt(0)) {
             case 's':
             case 'S':
@@ -23,14 +26,46 @@ public class Main {
                 System.out.println("You are using queue now.");
                 testQueue(input);
                 break;
+            case 'x':
+            case 'X':
+                System.out.println("You are using expression now.");
+                testExpression(input);
+                break;
             case 'e':
             case 'E':
                 goon = false;
                 System.out.println("Exit.");
                 break;
+            default:
+                System.out.println("Error choose, try again.");
             }
         }
         input.close();
+    }
+
+    static void testExpression(Scanner input) {
+        String exp;
+        boolean verbose = false;
+        boolean goon = true;
+        // to clear the '\n' in the start of input stream
+        input.nextLine();
+        while (goon) {
+            System.out.println("Please input your expression");
+            System.out.println("Input \"verbose\" to change verbose status, \"return\" to back to main):");
+            exp = input.nextLine();
+            if (exp.equals("verbose")) {
+                verbose = !verbose;
+                System.out.println("verbose " + (verbose ? "enabled" : "disabled"));
+            } else if (exp.equals("return")) {
+                goon = false;
+            } else {
+                try {
+                    System.out.println(Expression.calculate(exp, verbose));
+                } catch (ErrorExpressionException e) {
+                    System.out.println("Expression Error: " + e.getMessage());
+                }
+            }
+        }
     }
 
     static void testStack(Scanner input) {
