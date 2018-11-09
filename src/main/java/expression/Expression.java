@@ -148,6 +148,9 @@ public class Expression {
         return result;
     }
 
+    public static double calculate(String exp) throws ErrorExpressionException {
+        return Expression.calculate(exp, false);
+    }
     public static double calculate(String exp, boolean verbose) throws ErrorExpressionException {
         return Expression.calculate(Expression.infix2suffix(Expression.str2queue(exp), verbose), verbose);
     }
