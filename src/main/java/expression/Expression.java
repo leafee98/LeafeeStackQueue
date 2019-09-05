@@ -169,14 +169,19 @@ public class Expression {
                 e.printStackTrace();
             } catch (NumberFormatException e) {
                 try {
+                    // take care of the calculate order, if it's c/b/a, in number statck from top to bottom,
+                    // the operator is --, it should be 'b-c' and then 'a-(b-c)'.
+                    // PS: the original expression is "a-(b-c)"
+                    Double opNumb = Double.parseDouble(stk.pop());
+                    Double opNuma = Double.parseDouble(stk.pop());
                     if (que.front().equals("+")) {
-                        stk.push(Double.parseDouble(stk.pop()) + Double.parseDouble(stk.pop()) + "");
+                        stk.push(opNuma + opNumb + "");
                     } else if (que.front().equals("-")) {
-                        stk.push(Double.parseDouble(stk.pop()) - Double.parseDouble(stk.pop()) + "");
+                        stk.push(opNuma - opNumb + "");
                     } else if (que.front().equals("*")) {
-                        stk.push(Double.parseDouble(stk.pop()) * Double.parseDouble(stk.pop()) + "");
+                        stk.push(opNuma * opNumb + "");
                     } else if (que.front().equals("/")) {
-                        stk.push(Double.parseDouble(stk.pop()) / Double.parseDouble(stk.pop()) + "");
+                        stk.push(opNuma / opNumb + "");
                     } else {
                         throw new ErrorExpressionException("unsupported symbol");
                     }
